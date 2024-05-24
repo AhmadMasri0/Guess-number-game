@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
         color: 'white',
         borderWidth: 2,
         borderColor: 'white',
-
+        maxWidth: '80%',
+        width: 300
     }
 
 });

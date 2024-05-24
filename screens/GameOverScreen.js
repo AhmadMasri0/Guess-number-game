@@ -1,21 +1,40 @@
-import { Image, StyleSheet, Text, View } from "react-native"
+import { Dimensions, Image, ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native"
 import { Title } from "../components/ui/Title"
 import { Colors } from "../constants/Colors";
 import { PrimaryButton } from "../components/ui/PrimaryButton";
 
+const deviceWidth = Dimensions.get('window').width;
 
 export const GameOverScreen = ({ userNumber, roundsNumber, onRestartGame }) => {
 
-    return <View style={styles.rootScreen}>
-        <Title title={'Game Over!'} />
-        <View style={styles.imageContainer}>
-            <Image style={styles.image} source={require('../assets/images/success.png')} />
+    const { height, width } = useWindowDimensions();
+
+    let imageSize = 300;
+
+    if (width < 380) {
+        imageSize = 150;
+    }
+    if (height < 415) {
+        imageSize = 150;
+    }
+
+    const imageStyle = {
+        height: imageSize,
+        width: imageSize,
+        borderRadius: imageSize / 2
+    };
+    return <ScrollView>
+        <View style={styles.rootScreen}>
+            <Title title={'Game Over!'} />
+            <View style={[styles.imageContainer, imageStyle]}>
+                <Image style={styles.image} source={require('../assets/images/success.png')} />
+            </View>
+            <Text style={styles.summaryText}>
+                Your phone needed <Text style={styles.highlight}>{roundsNumber}</Text> rounds to guess <Text style={styles.highlight}>{userNumber}</Text>
+            </Text>
+            <PrimaryButton title={'Start new game'} onPress={onRestartGame} />
         </View>
-        <Text style={styles.summaryText}>
-            Your phone needed <Text style={styles.highlight}>{roundsNumber}</Text> rounds to guess <Text style={styles.highlight}>{userNumber}</Text>
-        </Text>
-        <PrimaryButton title={'Start new game'} onPress={onRestartGame} />
-    </View>
+    </ScrollView>
 }
 
 const styles = StyleSheet.create({
@@ -26,9 +45,6 @@ const styles = StyleSheet.create({
         padding: 24
     },
     imageContainer: {
-        borderRadius: 200,
-        width: 400,
-        height: 400,
         borderWidth: 3,
         borderColor: Colors.primary800,
         overflow: 'hidden',
